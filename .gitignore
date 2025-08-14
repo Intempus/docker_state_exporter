@@ -5,7 +5,26 @@
 *.iws
 *.iml
 out/
-vendor/ 
+
+### Go template
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (comment the line below if you want to checkin your vendor folder)
+vendor/
+
+# Go workspace file
+go.work
 
 ### Node template
 # Logs
@@ -69,5 +88,15 @@ build/
 *#
 #*
 
+### vscode
+.vscode/
+
 ### Direnv
 .direnv/
+
+### Project specific
+.cache/
+
+# Security scanning reports
+gosec-report.json
+gosec-report.sarif

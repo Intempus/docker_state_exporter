@@ -1,0 +1,78 @@
+---
+default_stages:
+  - pre-commit
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        files: \.(conf|j2|js|json|rb|md|py|sh|tf|tm?pl|txt|yaml|yml|go)$
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+        exclude: '^\.idea/.*$'
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+  - repo: https://github.com/Yelp/detect-secrets.git
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args:
+          - '--baseline'
+          - '.secrets.baseline'
+          - '--exclude-secrets'
+          - '.*fake.*'
+        exclude: 'package-lock\.json$|Pipfile\.lock$|poetry\.lock$|go\.sum$|^.secrets.baseline$'
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.13.1-beta
+    hooks:
+      - id: hadolint
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 3.0.3
+    hooks:
+      - id: editorconfig-checker-system
+        alias: ec
+  # Go-specific hooks
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
+    hooks:
+      - id: go-fmt
+      - id: go-vet
+      - id: go-imports
+      - id: go-cyclo
+        args: [-over=15]
+      - id: go-mod-tidy
+      - id: go-unit-tests
+      - id: golangci-lint
+  - repo: local
+    hooks:
+      - id: gosec
+        name: gosec security scanner
+        entry: gosec
+        language: system
+        files: '\.go$'
+        pass_filenames: false
+        args: ['./...']
+      - id: go-no-replacement
+        name: Avoid committing debug statements
+        entry: 'github\.com/(docker|prometheus)/'
+        language: fail
+        files: go\.(mod|sum)$
+      - id: govulncheck
+        name: govulncheck
+        entry: govulncheck
+        language: system
+        files: '\.go$'
+        pass_filenames: false
+        args: ['./...']
+      - id: gomarkdoc
+        name: Generate Go documentation
+        entry: gomarkdoc
+        language: system
+        files: '\.go$'
+        pass_filenames: false
+        args: ['--embed', '--include-unexported', '--output', 'README.md', './...']
