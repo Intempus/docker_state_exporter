@@ -1,1 +1,4 @@
-golang 1.19.4
+golang 1.24.6
+editorconfig-checker 3.4.0
+hadolint 2.12.0
+python 3.13.6
